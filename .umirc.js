@@ -10,8 +10,8 @@ export default {
       dynamicImport: false,
       title: '牛刀小试',
       dll: false,
-      
-      routes: {
+
+      routes: { 
         exclude: [
           /models\//,
           /services\//,

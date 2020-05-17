@@ -1,0 +1,28 @@
+.study{
+    height: 100%;
+    .studyBar{
+        height: 50px;
+        border-bottom: 1px solid #f00;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center
+    }
+    .studyContent{
+        height: calc(100% - 50px);
+        // border: 1px solid #000;
+        box-sizing: border-box;
+        display: flex;
+        .studyList{
+            width: 200px;
+            height: 100%;
+            // border: 1px solid #508fee;
+            box-sizing: border-box
+        }
+        .fileShow{
+            width: calc(100% - 200px);
+            height: 100%;
+            border-left: 1px solid #508fee;
+            box-sizing: border-box
+        }
+    }
+}

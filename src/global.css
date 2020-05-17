@@ -2,7 +2,29 @@ html, body, #root {
   height: 100%;
 }
 
-body {
+* {
   margin: 0;
+  padding: 0
 }
  
+body{
+  background: #f0f1e2;
+}
+
+ /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/ 
+ ::-webkit-scrollbar{  
+  width: 10px;
+  height: 10px;
+}
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track{
+  background: url(/img/scrollBg.png) no-repeat 4px 0;
+  background-size: 2px 100%
+}  
+/*定义滚动条轨道(垂直) 内阴影+圆角*/  
+::-webkit-scrollbar-track:horizontal{}
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb{ 
+  background: #fff;
+  border: 1px solid #508fee;
+}

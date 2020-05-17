@@ -1,11 +1,7 @@
 import { connect } from 'dva'
-import Layout from '../component/Layout/Index'
+import App from './Index/index'
 
-const Index = props => (
-  <Layout item={props.global.item} dispatch={props.dispatch}>
-    {props.global.content}
-  </Layout>
-)
+const Index = props => <App {...props}/>
 
 const mapStateToProps = state => ({
   global: state.global
