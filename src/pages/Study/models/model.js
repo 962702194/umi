@@ -1,5 +1,5 @@
 import {test} from '../../../services/test'
-import {upload, getDirList, getFileList, getFileContent} from '../../../services/file'
+import {upload, getDirList, getFileList, getFileContent, createDir, deleteDir} from '../../../services/file'
 import PubSub from 'pubsub-js'
 
 export default {
@@ -36,6 +36,26 @@ export default {
           const result = yield call(getFileContent,{fileName, dirName})
           if(result) {
              PubSub.publish('braftEditor',{data: result})
+          }
+        },
+        *createDir({payload},{call}){
+          const {dirName} = payload
+          const result = yield call(createDir, {dirName})
+          if(result){
+            alert('创建成功')
+            PubSub.publish('dirList')
+          }else{
+            alert('创建失败')
+          }
+        },
+        *deleteDir({payload},{call}){
+          const {dirName} = payload
+          const result = yield call(deleteDir, {dirName})
+          if(result){
+            alert('删除成功')
+            PubSub.publish('dirList',{dirName})
+          }else{
+            alert('删除失败')
           }
         }
     },

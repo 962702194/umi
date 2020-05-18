@@ -17,3 +17,13 @@ export async function getFileContent({dirName, fileName}){
     const params = { dirName, fileName }
     return request({url: '/getFileContent', params})
 }
+
+export async function createDir({dirName}){
+    const params = { dirName }
+    return request({url: '/createDir', params})
+}
+
+export async function deleteDir({dirName}){
+    const params = { dirName }
+    return request({url: '/deleteDir', params})
+}

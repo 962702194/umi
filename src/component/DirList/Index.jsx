@@ -1,5 +1,6 @@
 import React from 'react'
 import { Menu, Dropdown, Icon, Button } from 'antd';
+import PubSub from 'pubsub-js'
 import './Index.less'
 
 export default class DirList extends React.Component{
@@ -9,15 +10,38 @@ export default class DirList extends React.Component{
         dirName: null,
         fileName: null
     }
+
+    pubsub = null
+
     componentWillMount=()=>{
        this.init()
     }
 
-    init=()=>{
-        this.props.dispatch({type: 'study/getDirList',payload:{callback: this.setData}})
+    componentDidMount=()=>{
+        this.pubsub = PubSub.subscribe('dirList', this.myPubsub)
     }
-    setData=({dir, file})=>{
+
+    componentWillUnmount=()=>{
+        PubSub.unsubscribe(this.pubsub)
+        this.pubsub = null
+    }
+
+    myPubsub=(msg,data)=>{
+        if(data&&this.state.dirName === data.dirName)this.getDirList(this.setDirANDFile)
+        else this.getDirList(this.setDir)
+    }
+
+    init=()=>{
+        this.getDirList(this.setDirANDFile)
+    }
+    getDirList=(fn)=>{
+        this.props.dispatch({type: 'study/getDirList',payload:{callback:fn}})
+    }
+    setDirANDFile=({dir, file})=>{
         if(dir && dir instanceof Array)this.setState({dirList: dir, fileList: file, dirName: dir[0]})
+    }
+    setDir=({dir})=>{
+        if(dir && dir instanceof Array)this.setState({dirList: dir})
     }
 
     getFileList=(e)=>{
@@ -26,7 +50,6 @@ export default class DirList extends React.Component{
     setFile=(file, dirName)=>{
         if(file && file instanceof Array)this.setState({fileList: file, dirName: dirName})
     }
-
 
     getFileContent=(e)=>{
         const fileName = e.target.innerText
@@ -50,7 +73,7 @@ export default class DirList extends React.Component{
         })
     }
 
-      menuDropdown=()=>{ 
+    menuDropdown=()=>{ 
         const menu = (<Menu>{this.menu()}</Menu>)
         return(
             <Dropdown className='dirDown' overlay={menu} trigger={['click']}>
