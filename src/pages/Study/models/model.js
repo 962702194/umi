@@ -1,5 +1,5 @@
 import {test} from '../../../services/test'
-import {upload, getDirList, getFileList, getFileContent, createDir, deleteDir} from '../../../services/file'
+import {upload, getDirList, getFileList, getFileContent, createDir,renameDir, deleteDir, deleteFile, renameFile} from '../../../services/file'
 import PubSub from 'pubsub-js'
 
 export default {
@@ -48,6 +48,16 @@ export default {
             alert('创建失败')
           }
         },
+        *renameDir({payload},{call}){
+          const {dirName} = payload
+          const result = yield call(renameDir, {dirName})
+          if(result){
+            alert('重命名成功')
+            PubSub.publish('dirList')
+          }else{
+            alert('重命名失败')
+          }
+        },
         *deleteDir({payload},{call}){
           const {dirName} = payload
           const result = yield call(deleteDir, {dirName})
@@ -56,6 +66,26 @@ export default {
             PubSub.publish('dirList',{dirName})
           }else{
             alert('删除失败')
+          }
+        },
+        *deleteFile({payload},{call}){
+          const {dirName,fileName} = payload
+          const result = yield call(deleteFile, {dirName,fileName})
+          if(result){
+            alert('删除成功')
+            PubSub.publish('dirList',{dirName})
+          }else{
+            alert('删除失败')
+          }
+        },
+        *renameFile({payload},{call}){
+          const {dirName,fileName,rename} = payload
+          const result = yield call(renameFile, {dirName,fileName,rename})
+          if(result){
+            alert('修改成功')
+            PubSub.publish('dirList',{dirName})
+          }else{
+            alert('修改失败')
           }
         }
     },

@@ -23,7 +23,22 @@ export async function createDir({dirName}){
     return request({url: '/createDir', params})
 }
 
+export async function renameDir({dirName}){
+    const params = { dirName }
+    return request({url: '/renameDir', params})
+}
+
 export async function deleteDir({dirName}){
     const params = { dirName }
     return request({url: '/deleteDir', params})
+}
+
+export async function deleteFile({dirName,fileName}){
+    const params = { dirName,fileName }
+    return request({url: '/deleteFile', params})
+}
+
+export async function renameFile({dirName,fileName,rename}){
+    const params = { dirName,fileName,rename }
+    return request({url: '/renameFile', params})
 }

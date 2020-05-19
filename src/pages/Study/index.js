@@ -9,8 +9,7 @@ import './index.less'
 
 const initState = {
     isShow: false,
-    isDelete: false, 
-    isCreate: false
+    option: ''
 }
 
 class Study extends React.Component{
@@ -29,16 +28,25 @@ class Study extends React.Component{
         this.refs.inputRef.click()
     }
     createDir=()=>{
-        this.setState({isShow: true, isCreate: true, isDelete: false})
+        this.setState({isShow: true, option: 'create'})
+    }
+    renameDir=()=>{
+        this.setState({isShow: true, option: 'rename'})
     }
     deleteDir=()=>{
-        this.setState({isShow: true, isDelete: true, isCreate: false}) 
+        this.setState({isShow: true, option: 'delete'}) 
     }
     confirm=(dirName)=>{
-        if(this.state.isCreate){
-            this.props.dispatch({type:'study/createDir',payload:{dirName}})
-        }else{
-            this.props.dispatch({type:'study/deleteDir',payload:{dirName}})
+        switch(this.state.option){
+            case 'create':
+                this.props.dispatch({type:'study/createDir',payload:{dirName}})
+                break
+            case 'delete':
+                this.props.dispatch({type:'study/deleteDir',payload:{dirName}})
+                break
+            default:
+                this.props.dispatch({type:'study/renameDir',payload:{dirName}})
+                break
         }
         this.cancel()
     }
@@ -53,6 +61,7 @@ class Study extends React.Component{
                     <Button onClick={this.apitest}>测试api</Button>
                     <Button onClick={this.uploadReady}>测试上传文件</Button>
                     <Button onClick={this.createDir}>新建目录</Button>
+                    <Button onClick={this.renameDir}>重命名目录</Button>
                     <Button onClick={this.deleteDir}>删除目录</Button>
                     <input type='file' onChange={this.upload} multiple ref='inputRef' style={{display: 'none'}}/>
                 </div>

@@ -1,14 +1,18 @@
 import React from 'react'
 import { Menu, Dropdown, Icon, Button } from 'antd';
+import RightMenu from '../RightMenu/Index'
 import PubSub from 'pubsub-js'
 import './Index.less'
 
 export default class DirList extends React.Component{
     state={
-        dirList: [],
-        fileList: [],
-        dirName: null,
-        fileName: null
+        dirList: [], // 目录列表
+        fileList: [], //文件列表
+        dirName: null, //打开的目录名
+        fileName: null, //打开的文件名
+        left: 0,    //右击菜单的位置
+        top: 0, 
+        fileName2: null //右击菜单获取的文件名
     }
 
     pubsub = null
@@ -19,11 +23,19 @@ export default class DirList extends React.Component{
 
     componentDidMount=()=>{
         this.pubsub = PubSub.subscribe('dirList', this.myPubsub)
+        window.addEventListener('click', this.clear)
+        window.addEventListener('contextmenu', this.clear)
     }
 
-    componentWillUnmount=()=>{
+    componentWillUnmount=()=>{ 
         PubSub.unsubscribe(this.pubsub)
+        window.removeEventListener('click', this.clear)
+        window.removeEventListener('contextmenu', this.clear)
         this.pubsub = null
+    }
+
+    clear=()=>{
+        this.setState({fileName2:null})
     }
 
     myPubsub=(msg,data)=>{
@@ -57,9 +69,16 @@ export default class DirList extends React.Component{
         this.setState({fileName})
     }
 
+    getRightMenu=(e)=>{
+        const event = e || window.event
+        event.preventDefault()
+        event.stopPropagation()
+        this.setState({left: event.pageX ,top: event.pageY, fileName2:e.target.innerText})
+    }
+
     renderList = ()=>{
         return this.state.fileList.map((item, index)=>{
-            return <li className={this.state.fileName === item?'selected':null} key={index} onClick={this.getFileContent}>{item}</li>
+            return <li className={this.state.fileName === item?'selected':null} key={index} onContextMenu={this.getRightMenu} onClick={this.getFileContent}>{item}</li>
         })
     }
 
@@ -83,13 +102,27 @@ export default class DirList extends React.Component{
             </Dropdown>
         )
     }
+
+    setThisState=(obj)=>{
+        this.setState({...obj})
+    }
+
     render=()=>{
+        const {left,top, fileName2, dirName} = this.state
         return (
             <div className='dirList'>
                 {this.menuDropdown()}
                 <ul className='fileList'>
                     {this.renderList()}
                 </ul>
+                <RightMenu
+                    left={left} 
+                    top={top} 
+                    fileName={fileName2} 
+                    setPropsState={this.setThisState} 
+                    dispatch={this.props.dispatch} 
+                    dirName={dirName}
+                 />
             </div>
         )
     }
