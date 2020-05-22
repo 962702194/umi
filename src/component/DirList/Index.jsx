@@ -78,7 +78,7 @@ export default class DirList extends React.Component{
 
     renderList = ()=>{
         return this.state.fileList.map((item, index)=>{
-            return <li className={this.state.fileName === item?'selected':null} key={index} onContextMenu={this.getRightMenu} onClick={this.getFileContent}>{item}</li>
+            return <li title={item} className={this.state.fileName === item?'selected':null} key={index} onContextMenu={this.getRightMenu} onClick={this.getFileContent}>{item}</li>
         })
     }
 

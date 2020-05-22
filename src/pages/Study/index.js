@@ -14,14 +14,21 @@ const initState = {
 
 class Study extends React.Component{
     state={...initState}
-    apitest=()=>{
-        this.props.dispatch({type:'study/apitest'})
+    login=()=>{
+        console.log('登录')
     }
     upload=(e)=>{
         const file = e.target.files[0]
+        if(file.name.indexOf('.docx') === -1){
+          return window.alert('只支持上传docx文件')
+        }
         const formData = new FormData()
         formData.append('file', file)
-        this.props.dispatch({type:'study/upload',payload: {formData}})
+        const dirName = window.prompt()
+        if(dirName){
+            formData.append('dirName', dirName)
+            this.props.dispatch({type:'study/upload',payload: {formData}})
+        }
         e.target.value = null
     }
     uploadReady=()=>{
@@ -57,9 +64,8 @@ class Study extends React.Component{
         return (
             <div className='study'>
                 <div className='studyBar'>
-                    工具栏
-                    <Button onClick={this.apitest}>测试api</Button>
-                    <Button onClick={this.uploadReady}>测试上传文件</Button>
+                    <Button onClick={this.login}>登录</Button>
+                    <Button onClick={this.uploadReady}>上传文件</Button>
                     <Button onClick={this.createDir}>新建目录</Button>
                     <Button onClick={this.renameDir}>重命名目录</Button>
                     <Button onClick={this.deleteDir}>删除目录</Button>
