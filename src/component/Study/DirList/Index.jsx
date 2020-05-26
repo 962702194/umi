@@ -1,6 +1,8 @@
 import React from 'react'
 import { Menu, Dropdown, Icon, Button } from 'antd';
-import RightMenu from '../RightMenu/Index'
+import RightMenu from './Com'
+import Modal from '../../Modal/Index'
+import { HandleDir } from '../../Com/Index'
 import PubSub from 'pubsub-js'
 import './Index.less'
 
@@ -12,7 +14,9 @@ export default class DirList extends React.Component{
         fileName: null, //打开的文件名
         left: 0,    //右击菜单的位置
         top: 0, 
-        fileName2: null //右击菜单获取的文件名
+        fileName2: null, //右击菜单获取的文件名
+        isShow: false, 
+        option: 'rename'
     }
 
     pubsub = null
@@ -107,8 +111,17 @@ export default class DirList extends React.Component{
         this.setState({...obj})
     }
 
+    confirm=(rename, fileName)=>{
+        this.props.dispatch({type:'study/renameFile', payload: {fileName,dirName:this.state.dirName,rename}})
+        this.setState({isShow:false,fileName2:null})
+    }
+
+    cancel=()=>{
+        this.setState({isShow:false,fileName2:null})
+    }
+
     render=()=>{
-        const {left,top, fileName2, dirName} = this.state
+        const {left,top, fileName2, dirName, isShow, option} = this.state
         return (
             <div className='dirList'>
                 {this.menuDropdown()}
@@ -123,6 +136,9 @@ export default class DirList extends React.Component{
                     dispatch={this.props.dispatch} 
                     dirName={dirName}
                  />
+                <Modal isShow={isShow}>
+                    <HandleDir confirm={this.confirm} cancel={this.cancel} option={option} rename={fileName2}/>
+                </Modal>
             </div>
         )
     }

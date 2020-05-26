@@ -14,7 +14,8 @@ export default {
     * upload ({payload}, {call}) {
       const {formData} = payload
       const result = yield call(upload, {formData})
-      alert(result)
+      if(result)alert('上传成功')
+      else alert('上传失败')
     },
     * getDirList ({payload}, {call}) {
       const {callback} = payload
@@ -44,8 +45,8 @@ export default {
       }
     },
     * renameDir ({payload}, {call}) {
-      const {dirName} = payload
-      const result = yield call(renameDir, {dirName})
+      const {dirName, oldName} = payload
+      const result = yield call(renameDir, {dirName, oldName})
       if (result) {
         alert('重命名成功')
         PubSub.publish('dirList')

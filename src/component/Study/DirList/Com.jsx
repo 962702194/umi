@@ -1,5 +1,5 @@
 import React from 'react'
-import './Index.less'
+import './Com.less'
 
 export default class RightMenu extends React.Component{
     delete=()=>{
@@ -7,11 +7,7 @@ export default class RightMenu extends React.Component{
         this.props.setPropsState({fileName2: null}) 
     }
     rename=()=>{
-        const rename = window.prompt()
-        if(rename){
-            this.props.dispatch({type:'study/renameFile', payload: {fileName: this.props.fileName,dirName:this.props.dirName,rename}})
-        }
-        this.props.setPropsState({fileName2: null}) 
+        this.props.setPropsState({isShow: true})
     }
     render=()=>{
         const {left, top, fileName} = this.props

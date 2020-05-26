@@ -23,8 +23,8 @@ export async function createDir({dirName}){
     return request({url: '/createDir', params})
 }
 
-export async function renameDir({dirName}){
-    const params = { dirName }
+export async function renameDir({dirName, oldName}){
+    const params = { dirName, oldName }
     return request({url: '/renameDir', params})
 }
 
